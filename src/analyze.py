@@ -3,6 +3,7 @@ import csv
 import pandas as pd
 
 try:
+    from .functional_utils import get_top_client_by_category
     from .client import Client
     from .sale import Sale
     from .client_collection import ClientCollection
@@ -12,7 +13,7 @@ except ImportError:
     from sale import Sale
     from client_collection import ClientCollection
     from sales_collection import SalesCollection
-
+    from functional_utils import get_top_client_by_category
 def generate_report():
     # ==============================
     # 1. CARGAR CLIENTES
@@ -150,6 +151,16 @@ def generate_report():
 
         sales_by_category[sale.category] += sale.amount
 
+        top_clients_by_category = {}
+
+    categories = set(sale.category for sale in sales.sales)
+
+    for category in categories:
+        top_clients_by_category[category] = get_top_client_by_category(
+            sales.sales,
+            clients.clients,
+            category
+        )
     # ==============================
     # 11. CLIENTES DE ALTO GASTO
     # ==============================
@@ -204,6 +215,7 @@ def generate_report():
         },
         "clients": clients_report,
         "top_client_by_country": top_client_by_country,
+        "top_client_by_category": top_clients_by_category,
         "sales_by_category": {
             category: round(total, 2)
             for category, total in sales_by_category.items()

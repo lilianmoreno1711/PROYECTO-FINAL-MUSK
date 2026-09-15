@@ -56,6 +56,11 @@ def test_10_calculos_completos():
     assert top["Germany"] == "Bob"
     assert top["France"] == "Carol"
 
+    top_category = report["top_client_by_category"]
+
+    assert top_category["Electronics"] == "Alice"
+    assert top_category["Accessories"] == "Alice"
+
     # ------------------------------
     # 7) TOTAL DE VENTAS POR CATEGORÍA
     # ------------------------------
